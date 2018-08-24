@@ -1,6 +1,10 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
+// Need Mosquitto server on 1883 <- as a ubuntu-snap. restart system after install
+// need my server on 1884
+
+
 const char *mqttServer = "192.168.0.103";
 const int mqttPort = 1884;
 const char *mqttUser = "";
