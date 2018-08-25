@@ -1,5 +1,7 @@
 var mosca = require('mosca');
 
+// install zmq || libzmq3-dev from ubuntu repository
+// also install libpgm-dev
 
 var ascoltatore = {
     //using ascoltatore
