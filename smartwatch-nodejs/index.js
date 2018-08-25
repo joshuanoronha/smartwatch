@@ -8,12 +8,12 @@ var ascoltatore = {
     type: 'mqtt',
     json: false,
     mqtt: require('mqtt'),
-    host: '192.168.0.103',
-    port: 1883
+    host: 'localhost',
+    port: 1884
 };
 
 var settings = {
-    port: 1884,
+    port: 1885,
     backend: ascoltatore
 };
 
@@ -95,3 +95,7 @@ server.on('published', function (packet, client) {
     var text =  packet.payload.toString();
     addTelemetry(packet.client,text, 0 );
 });
+
+// sudo docker run -it -p 1884:1883 -p 9001:9001 eclipse-mosquitto
+// sudo docker build .  --network host -t myimage:2.6
+// sudo docker run  --network=host   fec529d3098d

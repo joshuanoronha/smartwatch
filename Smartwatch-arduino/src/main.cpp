@@ -5,13 +5,13 @@
 // need my server on 1884
 
 
-const char *mqttServer = "192.168.0.103";
-const int mqttPort = 1884;
+const char *mqttServer = "192.168.43.175";
+const int mqttPort = 1885;
 const char *mqttUser = "";
 const char *mqttPassword = "";
 
-const char *ssid = "TP-LINK_E352";
-const char *password = "temp12345";
+const char *ssid = "abc";
+const char *password = "joshua1234";
 
 int count = 0;
 
