@@ -10,8 +10,8 @@ const int mqttPort = 1884;
 const char *mqttUser = "";
 const char *mqttPassword = "";
 
-const char *ssid = "TP-LINK_E352";
-const char *password = "temp12345";
+const char *ssid = "ECUA";
+const char *password = "godofwar";
 
 int count = 0;
 

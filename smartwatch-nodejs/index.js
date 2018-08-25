@@ -6,7 +6,7 @@ var ascoltatore = {
     type: 'mqtt',
     json: false,
     mqtt: require('mqtt'),
-    host: '192.168.0.103',
+    host: 'localhost',
     port: 1883
 };
 
