@@ -10,8 +10,8 @@ const int mqttPort = 1885;
 const char *mqttUser = "";
 const char *mqttPassword = "";
 
-const char *ssid = "abc";
-const char *password = "joshua1234";
+const char *ssid = "ECUA";
+const char *password = "godofwar";
 
 int count = 0;
 
