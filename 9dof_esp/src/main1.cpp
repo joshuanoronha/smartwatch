@@ -1,74 +1,73 @@
-// Arduino Wire library is required if I2Cdev I2CDEV_ARDUINO_WIRE implementation
-// is used in I2Cdev.h
-// i2Cdev library and MPU9250 must be installed as libraries, or else the .cpp/.h file
-// for both clsses must be in the inlcude path of your projects. 
+#include <Arduino.h>
+#include <MPU9250_asukiaaa.h>
 
-#include "Wire.h"
-#include "I2Cdev.h"
-#include "MPU9250.h"
+#ifdef _ESP32_HAL_I2C_H_
+#define SDA_PIN D2
+#define SCL_PIN D1
+#endif
 
-// class default I2C address is 0x68
-// specific I2C addresses may be passed as a parameter here
+MPU9250 mySensor;
 
-// AD0 low = 0x68 (default for InvenSense evaluation board)
-// AD0 high = 0x69
-
-MPU9250 accelgyro;
-
-int16_t ax, ay, az;
-int16_t gx, gy, gz;
-int16_t mx, my, mz;
-
-#define LED_PIN 13 //Define as pin 13 LED on Arduino Board
-
-bool blinkState = false;
+uint8_t sensorId;
+float aX, aY, aZ, aSqrt, gX, gY, gZ, mDirection, mX, mY, mZ;
 
 void setup() {
-    // join I2C bus (I2Cdev library doesn't do this automatically)
-	
-    Wire.begin();
+  Serial.begin(921600);
+  delay(1000);
+  Serial.println("started");
 
-    // initialize serial communication
-    // (38400 chosen because it works as well at 8MHz as it does at 16MHz, but
-    // it's really up to you depending on your project)
-	
-    Serial.begin(19200); //Initializing serial communication 
+#ifdef _ESP32_HAL_I2C_H_ // For ESP32
+  Wire.begin(SDA_PIN, SCL_PIN); // SDA, SCL
+#else
+  Wire.begin();
+#endif
 
-    // initialize device
-	Serial.println("14CORE | MPU9250 TEST CODE")
-    Serial.println("Initializing I2C devices, please wait...");
-    accelgyro.initialize();
+  mySensor.setWire(&Wire);
+  mySensor.beginAccel();
+  mySensor.beginGyro();
+  mySensor.beginMag();
 
-    // verify connection
-    Serial.println("Verifiying device connections...");
-    Serial.println(accelgyro.testConnection() ? "MPU9250 connection successful" : "MPU9250 connection failed");
+  // You can set your own offset for mag values
+  // mySensor.magXOffset = -50;
+  // mySensor.magYOffset = -55;
+  // mySensor.magZOffset = -10;
 
-    // configure Arduino LED for
-    pinMode(LED_PIN, OUTPUT); //Define as LED pin13 Output
+  sensorId = mySensor.readId();
 }
 
 void loop() {
-	//Define as read raw Accelaration / Gyroscope measurement from the device.
-    accelgyro.getMotion9(&ax, &ay, &az, &gx, &gy, &gz, &mx, &my, &mz);
+//   Serial.println("sensorId: " + String(sensorId));
 
-    //these methods (and a few others) are also available
-    //accelgyro.getAcceleration(&ax, &ay, &az);
-    //accelgyro.getRotation(&gx, &gy, &gz);
+  mySensor.accelUpdate();
+//   aX = mySensor.accelX();
+//   aY = mySensor.accelY();
+//   aZ = mySensor.accelZ();
+  aSqrt = mySensor.accelSqrt();
+//   Serial.println("accelX: " + String(aX));
+//   Serial.println("accelY: " + String(aY));
+//   Serial.println("accelZ: " + String(aZ));
+  // Serial.println("accelSqrt: " + String(aSqrt));
+   Serial.println( String(aSqrt));
 
-    // display tab-separated accel/gyro x/y/z values
-	
-    Serial.print("a/g/m:\t");
-    Serial.print(ax); Serial.print("\t"); // Serial print AX
-    Serial.print(ay); Serial.print("\t"); // Serial print AY
-    Serial.print(az); Serial.print("\t"); // Serial print AZ
-    Serial.print(gx); Serial.print("\t"); // Serial print GX
-    Serial.print(gy); Serial.print("\t"); // Serial print GY
-    Serial.print(gz); Serial.print("\t"); // Serial print GZ
-    Serial.print(mx); Serial.print("\t"); // Serial print MX
-    Serial.print(my); Serial.print("\t"); // Serial print MY
-    Serial.println(mz);					  // Serial print MZ
+  mySensor.gyroUpdate();
+//   gX = mySensor.gyroX();
+//   gY = mySensor.gyroY();
+//   gZ = mySensor.gyroZ();
+//   Serial.println("gyroX: " + String(gX));
+//   Serial.println("gyroY: " + String(gY));
+//   Serial.println("gyroZ: " + String(gZ));
 
-    // blink LED to indicate activity
-    blinkState = !blinkState;
-    digitalWrite(LED_PIN, blinkState);
+  mySensor.magUpdate();
+  mX = mySensor.magX();
+  mY = mySensor.magY();
+  mZ = mySensor.magZ();
+  mDirection = mySensor.magHorizDirection();
+//   Serial.println("magX: " + String(mX));
+//   Serial.println("maxY: " + String(mY));
+//   Serial.println("magZ: " + String(mZ));
+//   Serial.println("horizontal direction: " + String(mDirection));
+
+//   Serial.println("at " + String(millis()) + "ms");
+//   Serial.println(""); // Add an empty line
+  delay(10);
 }
