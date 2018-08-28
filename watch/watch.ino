@@ -44,8 +44,7 @@ void loop() {
   String c = timeClient.getFormattedTime();
   display.clearDisplay();
   const char *time = c.c_str();
-  drawStr(80,15,const_cast<char*>(time));
- Serial.println(new_time);
+  drawStr(42,0,const_cast<char*>(time));
   display.display();
   delay(1000);
 }
