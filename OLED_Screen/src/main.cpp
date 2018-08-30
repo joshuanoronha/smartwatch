@@ -10,9 +10,9 @@
 /* Object named display, of the class Adafruit_SSD1306 */
 Adafruit_SSD1306 display(OLED_RESET);
 
-#if (SSD1306_LCDHEIGHT != 64)
-#error("Height incorrect, please fix Adafruit_SSD1306.h!");
-#endif
+// #if (SSD1306_LCDHEIGHT != 64)
+// #error("Height incorrect, please fix Adafruit_SSD1306.h!");
+// #endif
 
 uint8_t s = 0, m = 0, h = 0;
 
