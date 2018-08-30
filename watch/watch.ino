@@ -1,4 +1,3 @@
-
 #include <NTPClient.h>
 // change next line to use with another board/shield
 #include <ESP8266WiFi.h>
@@ -12,9 +11,45 @@
 #include <Adafruit_SSD1306.h>
 #define OLED_RESET D5
 Adafruit_SSD1306 display(OLED_RESET);
+bool pixel_map[] = {
+
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 
+  0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 
+  0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 
+  0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 
+  1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 
+  0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 
+  0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 
+  0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 
+  0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+};
 
 const char *ssid     = "abc";
 const char *password = "joshua1234";
+long lastSecTime = 0;
 
 WiFiUDP ntpUDP;
 int sec = 0;
@@ -25,6 +60,9 @@ boolean notificationExists = true;
 // no offset
 NTPClient timeClient(ntpUDP, (long)(3600 * 5.5));
 
+
+int charOffset , pixelOffset;
+int lastMarqueeCall;
 // You can specify the time server pool and the offset, (in seconds)
 // additionaly you can specify the update interval (in milliseconds).
 // NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", 3600, 60000);
@@ -36,24 +74,42 @@ void setup() {
   display.clearDisplay();  /* Clear display */
   display.setTextSize(1);  /* Select font size of text. Increases with size of argument. */
   display.setTextColor(WHITE);  /* Color of text*/
+  Serial.println ( "\n Connecting" );
+
   while ( WiFi.status() != WL_CONNECTED ) {
     delay ( 500 );
     Serial.print ( "." );
   }
 
+  lastSecTime = millis();
   timeClient.begin();
+
+
+  pixelOffset = 0;
+  charOffset = 0;
+  lastMarqueeCall = millis();
+  display.clearDisplay();
+
 }
 
+
 void loop() {
+  
+  display.clearDisplay();
+
   timeClient.update();
   String c = timeClient.getFormattedTime();
-  display.clearDisplay();
   const char *time = c.c_str();
   drawStr(42, 0, const_cast<char*>(time));
-  sec++;
-  Serial.print( sec);
 
-  if (sec == 5)
+  if (millis() - lastSecTime >= 1000)  {
+    sec++;
+    lastSecTime = millis();
+    //    Serial.println( sec);
+    blinking = !blinking;
+  }
+  
+  if (sec == 67)
   {
     sec = 0;
     battery--;
@@ -63,17 +119,27 @@ void loop() {
     if (battery < 3) battery = 3;
   }
   drawBattery(sec, battery);
-  if (notificationExists)
-  {
-    blinking = !blinking;
-    notification(blinking);
-  }
   display.drawFastHLine(3, 8, 120, 1);
   heart(15, 14);
   char b[] = "Tommy is a good boy.";
-  marquee(b , 6 , 10);
+  char bx[] = "by edwin";
+
+
+  marquee_helper(10, 24, b, 19);
+  marquee_helper(35, 13, bx, 4);
+
+  //  display.fillRect(5, 24, 5, 7, 0);
+  //  display.fillRect(113, 24, 5, 7, 0);
+
+  if (notificationExists)
+  {
+
+    notification(blinking);
+
+  }
+  wifiSymbolDisplay(10,10);
+
   display.display();
-  delay(1000);
 }
 
 
@@ -121,16 +187,59 @@ void heart(int x, int y)
   }
 }
 
-void marquee(char *y, int offset, int dispSpace)
+void drawStrOffset(uint8_t x, uint8_t y, char* str) {
+  display.setCursor(x, y);  /* Set x,y coordinates */
+  display.println(str);
+}
+
+
+void marquee_helper(int x, int y, char* completeString, int dispSpace) {
+  char output[30];
+
+  if (millis() - lastMarqueeCall > 100) {
+    pixelOffset -= 1;
+    lastMarqueeCall  = millis();
+  }
+  if ( pixelOffset  == -5)  {
+    charOffset += 1;
+    pixelOffset = 0;
+  }
+  marquee(completeString, charOffset, dispSpace, output);
+//
+//  Serial.print(output);
+//  Serial.print(" - " );
+//
+//  Serial.print(charOffset);
+//  Serial.print(" - " );
+//  Serial.println(x + pixelOffset);
+
+  drawStr(x + pixelOffset, y, output);
+  display.fillRect(x-5, y, 5, 7, 0);
+  display.fillRect(x+dispSpace*6-5, y, 5, 7, 0);
+//  marquee_helper(10, 24, b, 18);
+
+}
+
+void marquee(char *y, int offset, int dispSpace, char* output)
 {
   int len = strlen(y);
-  char output[30];
+  //  char output[30];
 
   for ( int i = 0; i < dispSpace; i++ ) {
     output[i] = y[(offset + i) % len];
   }
 
   output[dispSpace] = 0;
-  drawStr(0, 24, output);
+}
+
+void wifiSymbolDisplay(int x,int y)
+{
+  int i,j=0;
+  for (i=0;i<1024;i++)
+  {
+    if (i%32==0)
+      j++;
+    display.drawPixel(x+(i%32),y+j,1);
+  }
 }
 
