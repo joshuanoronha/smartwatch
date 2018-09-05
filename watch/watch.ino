@@ -47,8 +47,8 @@ bool pixel_map[] = {
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 };
 
-const char *ssid     = "abc";
-const char *password = "joshua1234";
+const char *ssid     = "TP-Link_6329";
+const char *password = "2051313908";
 long lastSecTime = 0;
 
 WiFiUDP ntpUDP;
