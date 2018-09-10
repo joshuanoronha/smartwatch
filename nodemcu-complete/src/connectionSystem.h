@@ -180,16 +180,46 @@ void generateHTMLPage(WiFiClient client_conn) {
     "<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}"
     ".button { background-color: #195B6A; border: none; color: white; padding: 16px 40px;"
     "text-decoration: none; font-size: 30px; margin: 2px; cursor: pointer;}"
-    ".button2 {background-color: #77878A;}</style></head>"
-    "<body><h1>ESP8266 Web Server</h1>"
-    "<p>GPIO 5 - State " + output5State + "</p>"
-    "<p><a href=\"/5/on\"><button class=\"button\">ON</button></a></p>"
-    "<p>GPIO 4 - State " + output4State + "</p>"
-    "<form action='/submit' method='get'>"
-    "    First name: <input type='text' name='fname'><br>"
-    "    Last name: <input type='text' name='lname'><br>"
-    "    <input type='submit' value='Submit'>"
-    "</form> "
+    ".button2 {background-color: #77878A;}</style>"
+    "<link href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO' crossorigin='anonymous'>"
+    "<script src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js' integrity='sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy' crossorigin='anonymous'></script>        "
+    "</head>"
+    "<body>"
+"<div class='row' style='height: 20%;'>"
+"</div>"
+"<div class='row'>"
+"<div class='col-sm-2'></div>"
+"<div class='col-sm-8'>"
+"<h1>dWatch V0.8</h1>"
+" <form class='form-horizontal' action='/submit'>"
+"  <div class='form-group'>"
+"    <label class='control-label col-sm-12' for='devicename'>Device name(No spaces):</label>"
+"    <div class='col-sm-10'>"
+"      <input type='text' class='form-control' id='devicename' placeholder='Enter Device Name'>"
+"    </div>"
+"  </div>"
+"  <div class='form-group'>"
+"    <label class='control-label col-sm-12' for='mqttip'>MQTT IP(like 192.168.1.103):</label>"
+"    <div class='col-sm-10'>"
+"      <input type='text' class='form-control' id='mqttip' placeholder='Enter MQTT Server IP'>"
+"    </div>"
+"  </div>"
+"  <div class='form-group'>"
+"    <label class='control-label col-sm-12' for='patientid'>Patient ID(nospaces):</label>"
+"    <div class='col-sm-10'>"
+"      <input type='text' class='form-control' id='patientid' placeholder='Enter Patient ID'>"
+"    </div>"
+"  </div>"
+"  <div class='form-group'>"
+"    <div class='col-sm-offset-2 col-sm-10'>"
+"      <button type='submit' class='btn btn-default'>Submit</button>"
+"    </div>"
+"  </div>"
+"</form> "
+"</div>"
+"<div class='col-sm-2'></div>"
+"</div>"
+
 
 "</body></html>");
 
@@ -197,18 +227,23 @@ void generateHTMLPage(WiFiClient client_conn) {
 }
 
 void updateConfig(String data) {
-    int fname_index=data.indexOf("fname=");
-    int lname_index=data.indexOf("lname=");
-    int end=data.indexOf(" ", lname_index);
+    int devicename_index=data.indexOf("devicename=");
+    int mqttserverip_index=data.indexOf("mqttip=");
+    int patientid_index=data.indexOf("patientid=");
+    int end=data.indexOf(" ", patientid_index);
 
-    String fname = data.substring(fname_index, lname_index-1);// to remove the '&'
-    String lname = data.substring(lname_index, end);
+    String devicename = data.substring(devicename_index, mqttserverip_index-1);// to remove the '&'
+    String mqttserverip = data.substring(mqttserverip_index, patientid_index-1);// to remove the '&'
+    String patientid = data.substring(patientid_index, end);
     
     Serial.println("-----------");
-    Serial.println(fname);
-    Serial.println(lname);
+    Serial.println(devicename);
+    Serial.println(mqttserverip);
+    Serial.println(patientid);
     Serial.println();
 
+    Serial.println("-----------");
+    Serial.println("-----------");
 
 }
 
@@ -223,9 +258,7 @@ void handleClientConn(WiFiClient client_conn) {
             Serial.write(c); // print it out the serial monitor
             header += c;
             
-            if (c != '\r' && c != '\n') { // if you got anything else but a carriage return character,
-                currentLine += c; // add it to the end of the currentLine
-            } else if (c == '\n') { // if the byte is a newline character
+            if (c == '\n') { // if the byte is a newline character
                 // if the current line is blank, you got two newline characters in a row. that's
                 // the end of the client_conn HTTP request, so send a response:
                 if (currentLine.length() == 0) {
@@ -249,6 +282,8 @@ void handleClientConn(WiFiClient client_conn) {
                 } else { // if you got a newline, then clear currentLine
                     currentLine = "";
                 }
+            } else if (c != '\r' && c != '\n') { // if you got anything else but a carriage return character,
+                currentLine += c; // add it to the end of the currentLine
             } 
         }
     }
