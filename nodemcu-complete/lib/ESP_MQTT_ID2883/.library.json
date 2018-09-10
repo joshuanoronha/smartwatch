@@ -1,0 +1,39 @@
+{
+    "description": "A Wrapper around mqtt for Arduino to be used with esp8266 modules.", 
+    "repository": {
+        "url": "https://github.com/i-n-g-o/esp-mqtt-arduino", 
+        "type": "git"
+    }, 
+    "platforms": [
+        "espressif8266"
+    ], 
+    "export": {
+        "exclude": [
+            "extras", 
+            "docs", 
+            "tests", 
+            "test", 
+            "*.doxyfile", 
+            "*.pdf"
+        ], 
+        "include": null
+    }, 
+    "authors": [
+        {
+            "maintainer": true, 
+            "name": "Ingo Randolf", 
+            "url": null, 
+            "email": null
+        }
+    ], 
+    "keywords": [
+        "communication"
+    ], 
+    "id": 2883, 
+    "name": "ESP MQTT", 
+    "frameworks": [
+        "arduino"
+    ], 
+    "version": "1.0.1", 
+    "homepage": null
+}
