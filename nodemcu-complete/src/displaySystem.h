@@ -1,6 +1,10 @@
 #include <Arduino.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h> 
+
+#ifndef DISPLAYSYSTEM 
+#define DISPLAYSYSTEM 
+
 #include "image_arrays.h"
 #define OLED_RESET D5
 
@@ -122,15 +126,23 @@ class DisplaySystem {
 
     }
 
-    void drawStartScreen(const char * ssid) {
-
-      drawBar();
-
-      wifiSymbolDisplay(1, 10, 0.5);
-      drawStr(10, 0, "Connecting to Wifi");
-      drawStr(45, 11, "SSID:");
-      drawStr(45, 20, const_cast<char *>(ssid));
-      display.display();
+    void drawStartScreen(char* action, char* ssid = "") {
+        clearDisplay();
+        drawBar();
+        wifiSymbolDisplay(1, 10, 0.5);
+        
+        if (strcmp(action, "Searching") == 0)   {
+            drawStr(10, 0, "Searching Wifi APs");
+        }
+        else if (strcmp(action, "Connecting") == 0){
+            drawStr(10, 0, "Connecting to Wifi");
+            drawStr(45, 11, "SSID:");
+            drawStr(45, 20, const_cast<char *>(ssid));
+        } else {
+            drawStr(10, 0, "Error");
+        }
+        
+        display.display();
 
     }
 
@@ -140,3 +152,5 @@ class DisplaySystem {
     }
 
 };
+
+#endif

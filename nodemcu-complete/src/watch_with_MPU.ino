@@ -6,55 +6,61 @@
 #include <Wire.h> 
 #include <string.h> 
 
+#include <PubSubClient.h>
+
 #include <EEPROM.h> 
 #include "displaySystem.h"
+
+#include "connectionSystem.h"
+
 
 MPU9250 mySensor;
 
 uint8_t sensorId;
 float aX,aY,aZ,aSqrt,gX,gY,gZ,mDirection,mX,mY,mZ;
 
-const char * ssid = "TP-Link_6329";
-const char * password = "2051313908";
 long lastSecTime = 0;
 
 WiFiUDP ntpUDP;
 int sec = 0;
 int battery = 10;
-
+int count = 0;
+char *device = "Edwin-watch";
 
 char* b = "Notification: Crocin Time ";
 boolean blinking = false;
+
 boolean notificationExists = true;
+
+
+void mqtt_callback(char *topic, byte *payload, unsigned int length){
+    Serial.print("Message arrived in topic: ");
+    Serial.println(topic);
+
+    Serial.print("Message:");
+    for (int i = 0; i < length; i++)
+    {
+        Serial.print((char)payload[i]);
+    }
+
+    Serial.println();
+    Serial.println("-----------------------");
+}
 
 NTPClient timeClient(ntpUDP, (long)(3600 * 5.5));
 DisplaySystem displaySystem;
+ConnectionSystem connectionSystem(device, mqtt_callback);
 
-
-void connectToWifi()    {
-    WiFi.begin(ssid, password);
-
-    Serial.println();
-    Serial.print("Connecting to ");
-    Serial.println(ssid);
-    while (WiFi.status() != WL_CONNECTED)  {
-        delay(500);
-        Serial.print(".");
-    }
-    Serial.println();
-    Serial.println("Connected");
-}
 
 void setup() {
     Serial.begin(115200);
 
-    displaySystem.drawStartScreen(ssid);
+    connectionSystem.searchAndConnectWifi(&displaySystem);
+    connectionSystem.connectToMQTT();
+    timeClient.begin();
 
-
-    connectToWifi();
 
     lastSecTime = millis();
-    timeClient.begin();
 
     mySensor.setWire(& Wire);
     mySensor.beginAccel();
@@ -118,9 +124,23 @@ void loop() {
         sec++;
         lastSecTime = millis();
         blinking = !blinking;
+
+
+        count += 1;
+
+        char buf[100];
+        String s = "count : =  ";
+        s.toCharArray(buf, s.length());
+        String m1 = String(count);
+
+        m1.toCharArray(buf +  s.length() - 1 , 100 - s.length()+1);
+
+        // connectionSystem.sendMessage("esp/test", buf );
     }
     batteryUpdate();
     drawNormalScreen();
 
-}
 
+    connectionSystem.loop();    // put on top later
+    connectionSystem.reconnectOnDisconnect(2000);
+}
