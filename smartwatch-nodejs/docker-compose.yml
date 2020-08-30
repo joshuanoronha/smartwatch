@@ -1,0 +1,10 @@
+version: '0.1'
+services:
+  myimage:
+    build: .
+    net: "host"
+  eclipse_mosquitto:
+    image: eclipse-mosquitto
+    ports:
+     - "1884:1883"
+     - "9001:9001"
