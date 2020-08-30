@@ -40,7 +40,7 @@ Here's a sample of the output on uploading the code to the NodeMCU
 ![Heart Rate](./images/heart_rate.png)
 
 Here's an example of the circuit diagram
-![Circuit Diagram](../circuit_diagram.png)
+![Circuit Diagram](./images/circuit_diagram.png)
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
