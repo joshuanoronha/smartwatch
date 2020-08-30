@@ -35,9 +35,9 @@ Resistors
 ## Working
 
 Here's a sample of the output on uploading the code to the NodeMCU 
-![Connecting to wifi](../images/connecting_to_wifi.png)
+![Connecting to wifi](./images/connecting_to_wifi.png)
 
-![Heart Rate](../heart_rate.png)
+![Heart Rate](./images/heart_rate.png)
 
 Here's an example of the circuit diagram
 ![Circuit Diagram](../circuit_diagram.png)
